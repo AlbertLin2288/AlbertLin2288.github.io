@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
-        <title>new page</title>
-    </head>
-    <body>
-    
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>new page</title>
+  </head>
+  <body>
     <button id="button1">Enter</button>
-<h3 id="str">not clicked</h3>
+    <h3 id="str">not clicked</h3>
+    <a href='https://albertlin2288.github.io/test2/programme_test/interactive/'>
+      <button>parent forder</button>
+    </a>
     <script>
-    var button = document.getElementById("button1");
-    var text = document.getElementById("str");
-    var checked = 0;
-    var checkButton = function(){
-        if (checked === 1){
-            text.textContent = "not clicked";
-            checked = 0;
-        }
-        else{
-            text.textContent = "clicked";
-            checked = 1;
-        }
-    };
-    button.addEventListener("click", checkButton);
-</script>
-</body></html>
+      var button = document.getElementById("button1");
+      var text = document.getElementById("str");
+      var checked = 0;
+      var checkButton = function(){
+          if (checked === 1){
+              text.textContent = "not clicked";
+              checked = 0;
+          }
+          else{
+              text.textContent = "clicked";
+              checked = 1;
+          }
+      };
+      button.addEventListener("click", checkButton);
+    </script>
+  </body>
+</html>
