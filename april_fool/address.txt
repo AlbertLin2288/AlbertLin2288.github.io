@@ -1,2 +1,2 @@
-update.py AlbertLin2288.github.io/april_fool/code/update.txt
-main.py AlbertLin2288.github.io/april_fool/code/main.txt
+update.py https://albertLin2288.github.io/april_fool/code/update.txt
+main.py https://albertLin2288.github.io/april_fool/code/main.txt
