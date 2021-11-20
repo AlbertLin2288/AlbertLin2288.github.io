@@ -14,7 +14,7 @@ def access(url, test):# repeatly try to get the page at 10s/tries
             time.sleep(10)
     return page
 
-def update(test =False):# update all python code
+def update(test =False):# update all code
     vUrl = access("https://albertlin2288.github.io/april_fool/version.txt", test)
     version = int(vUrl.read().decode().strip())
     with open("version.txt") as file:
