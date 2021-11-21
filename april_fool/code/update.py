@@ -28,3 +28,6 @@ def update(test =False):# update all code
                 file.write(program_ad.read().decode())
         with open("version.txt", "w") as file:
             file.write(str(version))
+
+if __name__ == "__main__":
+    update()
