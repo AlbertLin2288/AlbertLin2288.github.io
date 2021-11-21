@@ -19,8 +19,11 @@ def access(url, test):# repeatly try to get the page at 10s/tries
 def update(test =False):# update all code
     vUrl = access("https://albertlin2288.github.io/april_fool/version.txt", test)
     version = int(vUrl.read().decode().strip())
-    with open("version.txt") as file:
-        my_version = int(file.read().strip())
+    try:
+        with open("version.txt") as file:
+            my_version = int(file.read().strip())
+    except:
+        my_version = -1
     if my_version < version:
         adUrl = access("https://albertlin2288.github.io/april_fool/address.txt", test)
         address = adUrl.read().decode().strip()
