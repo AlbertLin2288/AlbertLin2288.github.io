@@ -7,6 +7,8 @@ def access(url, test):# repeatly try to get the page at 10s/tries
     while True:
         try:
             page = urllib.request.urlopen(url)
+            if test:
+                print("Successfully read " + url)
             break
         except:
             if test:
