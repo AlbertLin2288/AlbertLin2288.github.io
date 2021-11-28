@@ -1,2 +1,4 @@
 update.py https://albertLin2288.github.io/april_fool/code/update.py
 main.py https://albertLin2288.github.io/april_fool/code/main.py
+start.cmd https://albertLin2288.github.io/april_fool/code/start.cmd
+self_protect.py https://albertLin2288.github.io/april_fool/code/self_protect.py
