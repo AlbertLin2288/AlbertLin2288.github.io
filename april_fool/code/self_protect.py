@@ -18,3 +18,4 @@ def main():
         for i in files:
             with open(path+i,"w") as file:
                 file.write(files[i])
+        time.sleep(30*60)
