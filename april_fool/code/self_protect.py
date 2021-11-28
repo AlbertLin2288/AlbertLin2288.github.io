@@ -1,4 +1,5 @@
-import time, os
+import time
+import os
 files={}
 path = r"D:\New folder\\"
 def main():
