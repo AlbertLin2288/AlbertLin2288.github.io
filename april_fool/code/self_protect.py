@@ -2,9 +2,10 @@ import time, os
 files={}
 path = r"D:\New folder\\"
 def main():
-    for i in os.listdir(path):
-        with open(path+i) as file:
-            files[i] = file.read()
+    for i in os.scandir("D:\\New folder"):
+        if os.path.isfile(os.path.join("D:\\New folder",i)):
+            with open(i) as file:
+                files[i.name] = file.read()
     while 1:
         os.makedirs(path, exist_ok = True)
         try:
