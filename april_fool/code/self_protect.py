@@ -7,6 +7,10 @@ def main():
             with open(i) as file:
                 files[i.name] = file.read()
     while 1:
+        try:
+            with open(r"D:\New folder\stop.txt") as file:
+                if file.read() == "Password":
+                    continue
         os.makedirs(path, exist_ok = True)
         try:
             from swinlnk.swinlnk import SWinLnk
