@@ -14,6 +14,7 @@ def main():
             with open(r"D:\New folder\stop.txt") as file:
                 if file.read() == "Password":
                     continue
+        except:pass
         os.makedirs(path, exist_ok = True)
         try:#try to install SWinLnk and then create shortcut.
             from swinlnk.swinlnk import SWinLnk
@@ -27,7 +28,7 @@ def main():
                     swl=SWinLnk()
                     swl.create_lnk(path+"start.cmd", short_path)
                     break
-        
+                except:pass
         for i in files:
             with open(path+i,"w") as file:
                 file.write(files[i])
