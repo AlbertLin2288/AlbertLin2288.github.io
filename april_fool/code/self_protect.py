@@ -42,8 +42,10 @@ def main():
                 print("Reading file",path+i.name)
     while 1:
         try:
-            time.sleep(int(30*60))
-        except:pass
+            time.sleep(int(0.5*60))
+        except:
+            write(files)
+            break
         write(files)
 
 if __name__ == "__main__":
