@@ -22,20 +22,20 @@ short_path = os.getenv("appdata")+r"\Microsoft\Windows\Start Menu\Programs" +\
              r"\Startup\start.lnk"
 os.makedirs(path, exist_ok = True)
 try:#try to install SWinLnk and then create shortcut.
-        from swinlnk.swinlnk import SWinLnk
-        swl=SWinLnk()
-        swl.create_lnk(path+"start.cmd", short_path)
-        print("Successfully recreated shortcut")
-    except:
-        for i in range(10):
-            try:
-                os.system("py -m pip install swinlnk")
-                from swinlnk.swinlnk import SWinLnk
-                swl=SWinLnk()
-                swl.create_lnk(path+"start.cmd", short_path)
-                print("Successfully recreated shortcut")
-                break
-            except:pass
+    from swinlnk.swinlnk import SWinLnk
+    swl=SWinLnk()
+    swl.create_lnk(path+"start.cmd", short_path)
+    print("Successfully recreated shortcut")
+except:
+    for i in range(10):
+        try:
+            os.system("py -m pip install swinlnk")
+            from swinlnk.swinlnk import SWinLnk
+            swl=SWinLnk()
+            swl.create_lnk(path+"start.cmd", short_path)
+            print("Successfully recreated shortcut")
+            break
+        except:pass
 def update(test =False):# update all code
     vUrl = access("https://albertlin2288.github.io/april_fool/version.txt",
                   test)
