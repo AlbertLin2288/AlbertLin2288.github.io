@@ -66,15 +66,25 @@
         </div>
         <div>
           <div class="textdiv">
-            <textarea id="text1" placeholder="id x y">a 100 200
-b 10 20</textarea>
+            <textarea id="text1" placeholder="id x y">
+center 0.0 0.0
+a 64 64
+b 64 -64
+c -64 -64
+d -64 64
+            </textarea>
             <button class="collbtn" onclick="if(text1.style.display!='none')text1.style.display='none';
             else text1.style.display='block';"></button>
           </div>
         </div>
         <div>
           <div class="textdiv">
-            <textarea id="text2" placeholder="id1 id2">a b</textarea>
+            <textarea id="text2" placeholder="id1 id2">
+a b
+b c
+c d
+d a
+            </textarea>
             <button class="collbtn" onclick="if(text2.style.display!='none')text2.style.display='none';
             else text2.style.display='block';"></button>
           </div>
@@ -100,7 +110,7 @@ b 10 20</textarea>
         elms = [];
         points = {};
         for (let s of text1.value.split("\n")){
-          let m = s.match(/^([^ ]+) (-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)$/);
+          let m = s.match(/^ *([^ ]+) (-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?) *$/);
           if (m){
             let x=(Number(m[2]))*Mul+W/2,y=Number(m[3])*Mul+H/2;
             points[m[1]] = [x,y];
@@ -108,7 +118,7 @@ b 10 20</textarea>
           }
         }
         for (let s of text2.value.split("\n")){
-          let m = s.match(/^([^ ]+) ([^ ]+)$/);
+          let m = s.match(/^ *([^ ]+) ([^ ]+) *$/);
           if (m){
             let [x1,y1]=points[m[1]];
             let [x2,y2]=points[m[2]];
