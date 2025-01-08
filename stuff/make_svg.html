@@ -42,7 +42,7 @@
       #setting {
         display: flex;
         flex-direction: row;
-        background-color: lightgray;
+        padding-left: 3px;
       }
       #collape_btn {
         background-color: lightgray;
@@ -51,11 +51,26 @@
         margin: 3px 3px 3px auto;
         cursor: pointer;
       }
+      #data {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+      #body_box {
+        margin: 0px;
+        padding: 2vh;
+        height: 96vh;
+      }
       body {
         background-color: antiquewhite;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
       }
     </style>
-  <body>
+  <body id="body">
     <div id="body_box">
       <div id="setting_box">
         <div id="setting_header">
@@ -64,18 +79,20 @@
         <div id="setting">
           <div>
             <label for="width">width:</label>
-            <input type="number" name="width" id="width" value="1024" class="inp1"
-              onchange="W=self.event.target.value;svg.viewBox=`0 0 ${W*Mul2} ${H*Mul2}`"><br>
+            <input type="number" name="width" id="width" value="512" class="inp1"
+              onchange="W=self.event.target.value;update_svg();"><br>
             <label for="height">height:</label>
-            <input type="number" name="height" id="height" value="1024" class="inp1"
-              onchange="H=self.event.target.value;svg.viewBox=`0 0 ${W*Mul2} ${H*Mul2}`;"><br>
+            <input type="number" name="height" id="height" value="512" class="inp1"
+              onchange="H=self.event.target.value;update_svg();"><br>
             <label for="linew">line width:</label>
-            <input type="number" name="linew" id="linew" value="2" class="inp1" onchange="LW=self.event.target.value;"><br>
+            <input type="number" name="linew" id="linew" value="2" class="inp1"
+              onchange="LW=self.event.target.value;update_svg();"><br>
             <label for="points">points size:</label>
-            <input type="number" name="points" id="points" value="4" class="inp1" onchange="R=self.event.target.value;"><br>
+            <input type="number" name="points" id="points" value="4" class="inp1"
+              onchange="R=self.event.target.value;update_svg();"><br>
             <label for="scale">coords scale:</label>
             <input type="number" name="scale" id="scale" value="1.0" class="inp1" min="0.0" step="0.01"
-              onchange="Mul=self.event.target.value;"><br>
+              onchange="Mul=self.event.target.value;update_svg();"><br>
             <button onclick="update_svg();">update</button><button onclick="download_svg();">Download</button>
           </div>
           <div>
@@ -85,8 +102,7 @@ center 0.0 0.0
 a 64 64
 b 64 -64
 c -64 -64
-d -64 64
-              </textarea>
+d -64 64</textarea>
               <button class="collbtn" onclick="if(text1.style.display!='none')text1.style.display='none';
               else text1.style.display='block';"></button>
             </div>
@@ -99,8 +115,7 @@ b c
 c d
 d a
 a c
-b d
-              </textarea>
+b d</textarea>
               <button class="collbtn" onclick="if(text2.style.display!='none')text2.style.display='none';
               else text2.style.display='block';"></button>
             </div>
@@ -108,30 +123,36 @@ b d
         </div>
       </div>
       <div id="data">
-        <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" id="svg" viewBox="0 0 1024 1024">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" id="svg">
         </svg>
       </div>
     </div>
     <a id='download1' download='file.svg' type='text/svg' style="display: none;"></a>
+    <!-- config -->
+    <script>
+      const ScaleR = 0.2;
+    </script>
     <script>
       const text1=document.getElementById('text1');
       const text2=document.getElementById('text2');
       const svg_elm = document.getElementById("svg");
-      const bb = document.getElementById("body_box");
+      const body = document.getElementById("body");
       const a = document.getElementById('download1');
       const setting = document.getElementById("setting");
-      var W=1024,H=1024,LW=2,R=4, Mul=1.0,Mul2=1;
+      var W=512,H=512,LW=2,R=4, Mul=1.0,Mul2=0;
       var points = {};
       var elms = [];
       function min(a,b){if (a<b)return a;else return b;}
       function max(a,b){if (a<b)return b;else return a;}
+      text1.addEventListener("input",(e)=>update_svg());
+      text2.addEventListener("input",(e)=>update_svg());
       function create_svg_elements(){
         elms = [];
         points = {};
         for (let s of text1.value.split("\n")){
           let m = s.match(/^ *([^ ]+) (-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?) *$/);
           if (m){
-            let x=(Number(m[2]))*Mul+W/2,y=Number(m[3])*Mul+H/2;
+            let x=(Number(m[2]))*Mul+W/2,y=-Number(m[3])*Mul+H/2;
             points[m[1]] = [x,y];
             elms.push(`<circle r="${R}" cx="${x}" cy="${y}" fill="black" />`);
           }
@@ -139,6 +160,7 @@ b d
         for (let s of text2.value.split("\n")){
           let m = s.match(/^ *([^ ]+) ([^ ]+) *$/);
           if (m){
+            if (!(m[1] in points) || !(m[2] in points))continue;
             let [x1,y1]=points[m[1]];
             let [x2,y2]=points[m[2]];
             let dx=x2-x1,dy=y2-y1;
@@ -187,33 +209,78 @@ ${elms.join('\n')}
       }
       update_svg();
     </script>
-    <!-- dragbox -->
+    <!-- drag and zoom stuff -->
     <script>
+      // drag setting
       const drag_box = document.getElementById("setting_box");
       let drag_handle = document.getElementById("setting_header");
-      var m_x,m_y,d_x0=drag_box.offsetLeft, d_y0=drag_box.offsetTop;
-      drag_handle.onmousedown = (e) => {
+      var m_x,m_y,d_x0=drag_box.clientLeft, d_y0=drag_box.clientTop;
+      drag_handle.addEventListener("mousedown", drag_box_start)
+      function drag_box_start(e) {
         e = e|| window.event;
         e.preventDefault();
         m_x=e.clientX;
         m_y=e.clientY;
-        document.onmouseup = (e) => {
-          document.onmouseup=null;
-          document.onmousemove=null;
-        };
-        document.onmousemove = (e) => {
-          e = e|| window.event;
-          e.preventDefault();
-          d_y0 += (e.clientY - m_y);
-          d_x0 += (e.clientX - m_x);
-          d_y0 = max(min(d_y0, bb.offsetHeight-drag_box.offsetHeight),0);
-          d_x0 = max(min(d_x0, bb.offsetWidth-drag_box.offsetWidth),0);
-          drag_box.style.top = d_y0 + 'px';
-          drag_box.style.left = d_x0 + 'px';
-          m_x=e.clientX;
-          m_y=e.clientY;
-        }
+        document.addEventListener("mousemove", drag_box_drag);
+        document.addEventListener("mouseup", drag_box_end);
+      }
+      function drag_box_drag(e) {
+        e = e|| window.event;
+        e.preventDefault();
+        d_y0 += (e.clientY - m_y);
+        d_x0 += (e.clientX - m_x);
+        d_y0 = max(min(d_y0, body.clientHeight-1-drag_box.offsetHeight),0);
+        d_x0 = max(min(d_x0, body.clientWidth-1-drag_box.offsetWidth),0);
+        drag_box.style.top = d_y0 + 'px';
+        drag_box.style.left = d_x0 + 'px';
+        m_x=e.clientX;
+        m_y=e.clientY;
+      }
+      function drag_box_end(e) {
+        document.removeEventListener("mousemove", drag_box_drag);
+      }
+    </script>
+    <script>
+      // svg stuff
+      document.onwheel = (e) => {
+        e = e || window.event;
+        if (!svg_elm.contains(e.target))return;
+        let sl;
+        if (e.deltaY>0)sl=ScaleR;
+        else sl=-ScaleR;
+        svg_elm.viewBox.baseVal.x-=(Math.exp(sl)-1)*
+          (e.clientX-svg_elm.getBoundingClientRect().left)*Math.exp(Mul2);
+        svg_elm.viewBox.baseVal.y-=(Math.exp(sl)-1)*
+          (e.clientY-svg_elm.getBoundingClientRect().top)*Math.exp(Mul2);
+        Mul2 += sl;
+        svg_elm.viewBox.baseVal.width=svg_elm.width.baseVal.value*Math.exp(Mul2);
+        svg_elm.viewBox.baseVal.height=svg_elm.height.baseVal.value*Math.exp(Mul2);
       };
+      var m_x2,m_y2;
+      svg_elm.addEventListener("mousedown", drag_svg_start)
+      function drag_svg_start(e) {
+        e = e || window.event;
+        e.preventDefault();
+        m_x2=e.clientX;
+        m_y2=e.clientY;
+        document.addEventListener("mousemove", drag_svg_drag);
+        document.addEventListener("mouseup", drag_svg_end);
+      }
+      function drag_svg_drag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        svg_elm.viewBox.baseVal.x -= Math.exp(Mul2) * (e.clientX - m_x2);
+        svg_elm.viewBox.baseVal.y -= Math.exp(Mul2) * (e.clientY - m_y2);
+        m_x2=e.clientX;
+        m_y2=e.clientY;
+      }
+      function drag_svg_end(e) {
+        document.removeEventListener("mousemove", drag_svg_drag);
+      }
+      svg_elm.viewBox.baseVal.x = Math.exp(Mul2) * 0;
+      svg_elm.viewBox.baseVal.y = Math.exp(Mul2) * 0;
+      svg_elm.viewBox.baseVal.width = Math.exp(Mul2) * svg_elm.width.baseVal.value;
+      svg_elm.viewBox.baseVal.height = Math.exp(Mul2) * svg_elm.height.baseVal.value;
     </script>
 </body>
 </html>
